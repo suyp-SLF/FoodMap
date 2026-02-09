@@ -40,5 +40,18 @@
       "https://github.com/user-attachments/assets/97ac3927-7ff9-4902-bf5e-beefa3c56cb1"
     ],
     "url": "https://github.com/suyp-SLF/FoodMap/issues/6"
+  },
+  {
+    "name": "Markthalle",
+    "coords": [
+      48.77,
+      9.18
+    ],
+    "type": "甜点",
+    "note": "有很多中东甜点，面包，小蛋糕",
+    "images": [
+      "https://github.com/user-attachments/assets/78015802-d36c-49f8-b44e-1f31bf672a40"
+    ],
+    "url": "https://github.com/suyp-SLF/FoodMap/issues/7"
   }
 ]
