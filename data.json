@@ -1,20 +1,5 @@
 [
   {
-    "name": "Aljoud Konditorei",
-    "coords": [
-      52.47,
-      13.44
-    ],
-    "type": "中东甜点",
-    "note": "奶皮子、巴克拉瓦",
-    "images": [
-      "https://example.com/p1.jpg",
-      "https://example.com/p2.jpg",
-      "https://example.com/p3.jpg"
-    ],
-    "url": ""
-  },
-  {
     "name": "Burgermeister",
     "coords": [
       52.48,
