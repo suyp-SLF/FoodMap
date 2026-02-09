@@ -24,8 +24,11 @@ body:
         - 火锅
         - 甜点
         - 烧烤
-        - 日料
+        - 快餐
         - 地方菜
+        - 饮品
+        - 海鲜
+        - 自助
   - type: textarea
     id: note
     attributes:
