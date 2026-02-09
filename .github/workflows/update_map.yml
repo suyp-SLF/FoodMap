@@ -1,0 +1,56 @@
+name: Update Map Data
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-json:
+    if: contains(github.event.issue.labels.*.name, 'map-update')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Parse Issue
+        id: parse
+        uses: stefanbuck/github-issue-parser@v3
+        with:
+          template-path: .github/ISSUE_TEMPLATE/add_shop.yml
+
+      - name: Update data.json
+        run: |
+          # 使用 node 脚本处理 JSON 追加入库
+          node << 'EOF'
+          const fs = require('fs');
+          const issueData = ${{ steps.parse.outputs.jsonString }};
+          const filePath = './data.json';
+          
+          let mapData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+          
+          const newEntry = {
+            name: issueData.name,
+            coords: JSON.parse(issueData.coords),
+            type: issueData.type,
+            note: issueData.note,
+            images: issueData.images ? issueData.images.split('\n').filter(i => i) : [],
+            url: `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/${${{ github.event.issue.number }}}`
+          };
+          
+          mapData.push(newEntry);
+          fs.writeFileSync(filePath, JSON.stringify(mapData, null, 2));
+          EOF
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Add new shop: ${{ github.event.issue.title }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Close Issue
+        run: gh issue close ${{ github.event.issue.number }} --comment "✅ 地图已同步！"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
