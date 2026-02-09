@@ -1,49 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Foodie Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="map"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        const map = L.map('map').setView([35.0, 105.0], 4); // 默认显示中国全图
 
-        // 使用更清爽的底图样式 (CartoDB Light)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
+<div id="map"></div>
 
-        // 异步获取 JSON 数据
-        fetch('data.json')
-        .then(response => response.json())
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // 1. 初始化地图 (中心点指向中国)
+    const map = L.map('map').setView([35.0, 105.0], 5);
+
+    // 2. 加载浅色干净底图
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO'
+    }).addTo(map);
+
+    // 3. 异步读取数据
+    fetch('data.json')
+        .then(res => res.json())
         .then(data => {
             data.forEach(item => {
-                // 1. 先处理图片数组，生成 <img> 标签列表
-                let imgHtml = '';
+                // 处理图片 HTML
+                let imgs = '';
                 if (item.images && item.images.length > 0) {
-                    imgHtml = '<div class="image-container">';
-                    item.images.forEach(imgUrl => {
-                        imgHtml += `<img src="${imgUrl}" class="food-pic" onclick="window.open('${imgUrl}')">`;
+                    imgs = '<div class="image-container">';
+                    item.images.forEach(src => {
+                        imgs += `<img src="${src}" class="food-pic" onclick="window.open('${src}')">`;
                     });
-                    imgHtml += '</div>';
+                    imgs += '</div>';
                 }
-    
-                // 2. 组装整个弹窗内容
-                const popupContent = `
+
+                // 组装内容
+                const content = `
                     <span class="popup-title">${item.name}</span>
                     <span class="tag">${item.type}</span>
-                    ${imgHtml} 
+                    ${imgs}
                     <div class="note">${item.note}</div>
-                    <a href="${item.url}" target="_blank" class="detail-link">🔗 查看详情 / 导航</a>
+                    <a href="${item.url}" target="_blank" class="detail-link">📍 导航/详情</a>
                 `;
-    
-                L.marker(item.coords).addTo(map).bindPopup(popupContent, {
-                    maxWidth: 300 // 限制弹窗最大宽度，防止图片撑爆
-                });
+
+                // 打点
+                L.marker(item.coords).addTo(map).bindPopup(content, { maxWidth: 320 });
             });
-        });
-    </script>
+        })
+        .catch(err => console.error("数据加载失败:", err));
+</script>
 </body>
 </html>
