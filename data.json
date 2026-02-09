@@ -13,5 +13,18 @@
       "https://example.com/p3.jpg"
     ],
     "url": ""
+  },
+  {
+    "name": "Burgermeister",
+    "coords": [
+      52.48,
+      13.42
+    ],
+    "type": "快餐",
+    "note": "想吃😋",
+    "images": [
+      "![Image](https://github.com/user-attachments/assets/fc595bfd-d5ee-4d30-b57e-dc767bd726c6)"
+    ],
+    "url": "https://github.com/suyp-SLF/FoodMap/issues/5"
   }
 ]
