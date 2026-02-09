@@ -1,31 +1,55 @@
-/* 图片滚动容器 */
-.image-container {
-    display: flex;
-    overflow-x: auto; /* 横向滚动 */
-    gap: 8px;
-    margin: 8px 0;
-    padding-bottom: 5px;
+body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+#map { height: 100vh; width: 100%; background: #f0f0f0; }
+
+/* 弹窗容器 */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-/* 隐藏滚动条但保留功能 (可选) */
-.image-container::-webkit-scrollbar {
-    height: 4px;
+.popup-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 4px;
 }
-.image-container::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
+
+.tag {
+    display: inline-block;
+    font-size: 11px;
+    color: white;
+    background: #ff7675;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+/* 图片滚动栏 */
+.image-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    margin: 10px 0;
 }
 
 .food-pic {
-    width: 120px;
-    height: 90px;
-    object-fit: cover; /* 裁剪填充，保证比例一致 */
-    border-radius: 6px;
-    flex-shrink: 0; /* 防止被压缩 */
-    cursor: pointer;
-    transition: transform 0.2s;
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    transition: 0.3s;
 }
 
-.food-pic:hover {
-    transform: scale(1.05);
+.food-pic:hover { transform: scale(1.05); }
+
+.note { font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 10px; }
+
+.detail-link {
+    color: #0984e3;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
 }
