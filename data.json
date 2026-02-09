@@ -26,5 +26,19 @@
       "https://github.com/user-attachments/assets/fc595bfd-d5ee-4d30-b57e-dc767bd726c6"
     ],
     "url": "https://github.com/suyp-SLF/FoodMap/issues/5"
+  },
+  {
+    "name": "Carls Brewery",
+    "coords": [
+      48.78,
+      9.18
+    ],
+    "type": "地方菜",
+    "note": "脆皮猪脚不错，施瓦本馄饨太一般了，但是到处都在宣传，不理解但尊重",
+    "images": [
+      "https://github.com/user-attachments/assets/47092bb5-2bfc-4001-ab1a-0fa1e46c2139",
+      "https://github.com/user-attachments/assets/97ac3927-7ff9-4902-bf5e-beefa3c56cb1"
+    ],
+    "url": "https://github.com/suyp-SLF/FoodMap/issues/6"
   }
 ]
