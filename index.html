@@ -17,20 +17,33 @@
 
         // 异步获取 JSON 数据
         fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(item => {
-                    const marker = L.marker(item.coords).addTo(map);
-                    const popupContent = `
-                        <div class="popup-title">${item.name}</div>
-                        <span class="tag">${item.type}</span>
-                        <p style="font-size:12px; color:#666;">${item.note}</p>
-                        <a href="${item.url}" target="_blank" style="font-size:12px; color:#3498db;">查看详情</a>
-                    `;
-                    marker.bindPopup(popupContent);
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(item => {
+                // 1. 先处理图片数组，生成 <img> 标签列表
+                let imgHtml = '';
+                if (item.images && item.images.length > 0) {
+                    imgHtml = '<div class="image-container">';
+                    item.images.forEach(imgUrl => {
+                        imgHtml += `<img src="${imgUrl}" class="food-pic" onclick="window.open('${imgUrl}')">`;
+                    });
+                    imgHtml += '</div>';
+                }
+    
+                // 2. 组装整个弹窗内容
+                const popupContent = `
+                    <span class="popup-title">${item.name}</span>
+                    <span class="tag">${item.type}</span>
+                    ${imgHtml} 
+                    <div class="note">${item.note}</div>
+                    <a href="${item.url}" target="_blank" class="detail-link">🔗 查看详情 / 导航</a>
+                `;
+    
+                L.marker(item.coords).addTo(map).bindPopup(popupContent, {
+                    maxWidth: 300 // 限制弹窗最大宽度，防止图片撑爆
                 });
-            })
-            .catch(err => console.error('Error loading map data:', err));
+            });
+        });
     </script>
 </body>
 </html>
