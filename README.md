@@ -1,7 +1,17 @@
-## 🗺️ 我的美食足迹 (My Foodie Map)
+## 🍽️ 我的美食探索地图
 
-点击下方地图，查看我发现的宝藏餐厅：
+![](https://img.shields.io/badge/探店城市-12-orange?style=flat-square) 
+![](https://img.shields.io/badge/必吃推荐-45-red?style=flat-square) 
+![](https://img.shields.io/badge/状态-持续寻味中-green?style=flat-square)
 
-[![Food Map Preview](./map-preview.png)](https://yourname.github.io/food-map/)
+---
 
-> 💡 **小贴士**：地图会不定期更新，如果你有推荐的馆子，欢迎提 Issue 告诉我！
+### 📍 实时足迹预览
+
+
+> [点击此处进入全屏交互地图 ➔](https://你的用户名.github.io/food-map/)
+
+**最新打卡：**
+- [x] **广州** · 陶陶居 (早茶)
+- [x] **成都** · 某某苍蝇馆子 (川菜)
+- [ ] **顺德** · 计划中...
