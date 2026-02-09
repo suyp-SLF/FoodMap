@@ -1,11 +1,12 @@
 name: Update Map Data
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened, edited]
 
 jobs:
   update-json:
-    if: contains(github.event.issue.labels.*.name, 'map-update')
+    # 只要标题包含“美食打卡”就运行，不再强制要求无法创建的标签
+    if: contains(github.event.issue.title, '美食打卡')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -19,25 +20,54 @@ jobs:
 
       - name: Update data.json
         run: |
-          # 使用 node 脚本处理 JSON 追加入库
           node << 'EOF'
           const fs = require('fs');
           const issueData = ${{ steps.parse.outputs.jsonString }};
           const filePath = './data.json';
           
-          let mapData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+          let mapData = [];
+          if (fs.existsSync(filePath)) {
+            try {
+              mapData = JSON.parse(fs.readFileSync(filePath, 'utf8') || '[]');
+            } catch (e) { 
+              console.log('JSON解析失败，重置为空数组');
+              mapData = []; 
+            }
+          }
+          
+          // --- 核心：图片地址过滤逻辑 ---
+          // 自动从 ![Image](https://...) 中提取 URL，并过滤掉空行
+          const cleanImages = issueData.images 
+            ? issueData.images.split(/[\n,]+/).map(line => {
+                const match = line.match(/\((https?:\/\/[^\)]+)\)/); // 提取括号中的链接
+                return match ? match[1] : line.replace(/[!\[\]]/g, '').trim();
+              }).filter(url => url.startsWith('http')) 
+            : [];
+
+          // --- 核心：坐标解析逻辑 ---
+          // 兼容 [12.3, 45.6] 或 12.3, 45.6 格式
+          let coords = issueData.coords;
+          try {
+            if (typeof coords === 'string') {
+              coords = JSON.parse(coords.includes('[') ? coords : `[${coords}]`);
+            }
+          } catch (e) { 
+            console.error('坐标解析错误:', coords);
+            coords = [0, 0]; 
+          }
           
           const newEntry = {
             name: issueData.name,
-            coords: JSON.parse(issueData.coords),
+            coords: coords,
             type: issueData.type,
             note: issueData.note,
-            images: issueData.images ? issueData.images.split('\n').filter(i => i) : [],
-            url: `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/${${{ github.event.issue.number }}}`
+            images: cleanImages,
+            url: `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/${{ github.event.issue.number }}`
           };
           
           mapData.push(newEntry);
           fs.writeFileSync(filePath, JSON.stringify(mapData, null, 2));
+          console.log('成功存入数据:', newEntry.name);
           EOF
 
       - name: Commit and Push
@@ -45,12 +75,13 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data.json
-          git commit -m "Add new shop: ${{ github.event.issue.title }}"
+          git commit -m "Add shop: ${{ github.event.issue.title }}"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Close Issue
-        run: gh issue close ${{ github.event.issue.number }} --comment "✅ 地图已同步！"
+        # 移除 --label 参数，避免因无法创建标签导致的报错
+        run: gh issue close ${{ github.event.issue.number }} --comment "✅ 地图已自动更新！数据已存入 data.json"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
