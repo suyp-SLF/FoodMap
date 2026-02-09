@@ -1,7 +1,10 @@
 [
   {
     "name": "Aljoud Konditorei",
-    "coords": [52.47, 13.44],
+    "coords": [
+      52.47,
+      13.44
+    ],
     "type": "中东甜点",
     "note": "奶皮子、巴克拉瓦",
     "images": [
@@ -10,5 +13,16 @@
       "https://example.com/p3.jpg"
     ],
     "url": ""
+  },
+  {
+    "name": "ddd",
+    "coords": [
+      30.65,
+      104.06
+    ],
+    "type": "海鲜",
+    "note": "",
+    "images": [],
+    "url": "https://github.com/suyp-SLF/FoodMap/issues/4"
   }
 ]
