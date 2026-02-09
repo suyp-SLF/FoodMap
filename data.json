@@ -13,16 +13,5 @@
       "https://example.com/p3.jpg"
     ],
     "url": ""
-  },
-  {
-    "name": "ddd",
-    "coords": [
-      30.65,
-      104.06
-    ],
-    "type": "海鲜",
-    "note": "",
-    "images": [],
-    "url": "https://github.com/suyp-SLF/FoodMap/issues/4"
   }
 ]
